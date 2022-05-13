@@ -1,6 +1,6 @@
 import os
-from dotenv import load_dotenv
-load_dotenv()
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 class Config:
     
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')  
@@ -10,7 +10,7 @@ class Config:
 
 class ProdConfig(Config):
     
-    pass
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 
 
 class DevConfig(Config):
