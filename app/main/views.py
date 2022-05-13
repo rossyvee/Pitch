@@ -4,7 +4,7 @@ from app import app
 @main.route('/')
 def index():
     pitches = Pitch.query.all()
-    job = Pitch.query.filter_by(category = 'Job').all() 
-    event = Pitch.query.filter_by(category = 'Events').all()
-    advertisement = Pitch.query.filter_by(category = 'Advertisement').all()
-    return render_template('index.html', job = job,event = event, pitches = pitches,advertisement= advertisement)
+    product = Pitch.query.filter_by(category = 'product').all() 
+    technology = Pitch.query.filter_by(category = 'techology').all()
+    business = Pitch.query.filter_by(category = 'business').all()
+    return render_template('index.html', product = product,business = business, pitches = pitches,technology= technology)
