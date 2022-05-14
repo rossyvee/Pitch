@@ -4,9 +4,17 @@ from os import path
 from flask_login import LoginManager
 
 
-def create_app(app):
+db = SQLAlchemy()
+
+
+def create_app(config_name):
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = "hello world"
+    app.config.from_object(config_options[config_name])
+
+    db.init_app(app)
+
+
+
 
     from .main import main as main_blueprint
     from .auth import auth as auth_blueprint
