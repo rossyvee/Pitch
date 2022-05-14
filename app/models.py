@@ -1,6 +1,5 @@
 
-  
-from sqlalchemy.sql import func
+from datetime import datetime 
 from flask_login import UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db,login_manager
@@ -11,7 +10,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(160), nullable=False, unique=True)
     email = db.Column(db.String(160), nullable=False, unique=True)
     password = db.Column(db.String(160), nullable=False)
-    date_created = db.Column(db.Date(timezone=True), default=func.now())
+    bio = db.Column(db.String(210))
     profile_pic_path = db.Column(db.String())
     pitches = db.relationship('Pitch', backref='user', lazy='dynamic')
     comment = db.relationship('Comment', backref='user', lazy='dynamic')
