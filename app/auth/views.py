@@ -5,7 +5,7 @@ from flask_login import login_user, logout_user
 
 
 
-@auth.route('/login')
+@auth.route('/login', methods = ['GET','POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -17,7 +17,7 @@ def login():
     return render_template('auth/login.html', loginform = form)
 
 
-@auth.route('/sign-up')
+@auth.route('/sign-up', methods = ['GET','POST'])
 def sign_up():
    form = RegForm()
    if form.validate_on_submit():
@@ -28,7 +28,7 @@ def sign_up():
         return render_template('auth/signup.html', r_form = form)
 
 
-@auth.route('/sign-out')
+@auth.route('/sign-out', methods = ['GET','POST'])
 def login_out():
 
    return render_template('log_out.html')
