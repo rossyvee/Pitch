@@ -1,9 +1,10 @@
-
-from flask import flash, render_template, request, redirect, url_for
-from app import auth
-from flask_login import login_user, logout_user
-
-
+from flask import render_template,url_for,flash,redirect,request
+from . import auth
+from flask_login import login_user,login_required,logout_user
+from .forms import RegForm,LoginForm
+from ..models import User
+from .. import db
+from ..email import mail_message
 
 @auth.route('/login', methods = ['GET','POST'])
 def login():
@@ -16,19 +17,18 @@ def login():
         flash('Invalid username or Password')
     return render_template('auth/login.html', loginform = form)
 
+@auth.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("main.index"))
 
-@auth.route('/sign-up', methods = ['GET','POST'])
-def sign_up():
-   form = RegForm()
-   if form.validate_on_submit():
+@auth.route('/signup', methods = ["GET","POST"])
+def signup():
+    form = RegForm()
+    if form.validate_on_submit():
         user = User(email = form.email.data, username = form.username.data, password = form.password.data)
         user.save_u()
-        mail_message("Welcome to Pitch-World","email/welcome_user",user.email,user=user)
+        # mail_message("Welcome to Megapitch","email/welcome_user",user.email,user=user)
         return redirect(url_for('auth.login'))
-        return render_template('auth/signup.html', r_form = form)
-
-
-@auth.route('/sign-out', methods = ['GET','POST'])
-def login_out():
-
-   return render_template('log_out.html')
+    return render_template('auth/signup.html', r_form = form)
