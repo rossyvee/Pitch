@@ -5,5 +5,5 @@ from app import main
 
 @main.route('/')
 def home():
-    return "Home"
+    return render_template(".html")
     
