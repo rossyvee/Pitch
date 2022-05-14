@@ -1,17 +1,17 @@
 
   
-from datetime import datetime
+from sqlalchemy.sql import func
 from flask_login import UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import db,login_manager
+from . import db,login_manager
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(255), nullable=False, unique=True)
-    email = db.Column(db.String(255), nullable=False, unique=True)
-    password = db.Column(db.String(255), nullable=False)
-    bio = db.Column(db.String(255))
+    username = db.Column(db.String(160), nullable=False, unique=True)
+    email = db.Column(db.String(160), nullable=False, unique=True)
+    password = db.Column(db.String(160), nullable=False)
+    date_created = db.Column(db.Date(timezone=True), default=func.now())
     profile_pic_path = db.Column(db.String())
     pitches = db.relationship('Pitch', backref='user', lazy='dynamic')
     comment = db.relationship('Comment', backref='user', lazy='dynamic')
@@ -126,4 +126,4 @@ class Downvote(db.Model):
             return f'{self.user_id}:{self.pitch_id}'
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(user_id)
+    return User.query.get(int(user_id))
