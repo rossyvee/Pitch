@@ -1,5 +1,5 @@
 
-from flask import render_template, request, redirect, url_for
+from flask import flash, render_template, request, redirect, url_for
 from app import auth
 from flask_login import login_user, logout_user
 
