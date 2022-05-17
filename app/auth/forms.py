@@ -1,23 +1,25 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, TextAreaField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import ValidationError, StringField,PasswordField,SubmitField,BooleanField
+from wtforms.validators import DataRequired,Email,EqualTo
 from ..models import User
 
-class PitchForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired
-()])
-    category = SelectField('Category', choices=[('Events','Events'),('Job','Job'),('Advertisement','Advertisement')],validators=[DataRequired
-()])
-    post = TextAreaField('Your Pitch', validators=[DataRequired
-()])
-    submit = SubmitField('Pitch')
+class LoginForm(FlaskForm):
+    username = StringField('Username',validators=[DataRequired()])
+    password = PasswordField('Password',validators=[DataRequired()])
+    remember = BooleanField('Remember Me!')
+    submit = SubmitField('Login')
 
-class UpdateProfile(FlaskForm):
-    bio = TextAreaField('Write a brief bio about you.',validators = [DataRequired
-()])
-    submit = SubmitField('Save')
+class RegForm(FlaskForm):
+    email = StringField('Your Email Address', validators=[DataRequired(),Email()])
+    username = StringField('Enter Your Username', validators=[DataRequired()])
+    password = PasswordField('Password',validators = [DataRequired(), EqualTo('password_confirm',message = 'Passwords must match')])
+    password_confirm = PasswordField('Confirm Passwords',validators = [DataRequired()])
+    submit = SubmitField('Sign Up')
 
-class CommentForm(FlaskForm):
-    comment = TextAreaField('Leave a comment',validators=[DataRequired
-()])
-    submit = SubmitField('Comment')
+    def validate_email(self,data_field):
+        if User.query.filter_by(email = data_field.data).first():
+            raise ValidationError("The Email has already been taken!")
+    
+    def validate_username(self, data_field):
+        if User.query.filter_by(username = data_field.data).first():
+            raise ValidationError("The username has already been taken")

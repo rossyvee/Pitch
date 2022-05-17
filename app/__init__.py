@@ -4,30 +4,38 @@ from flask_mail import Mail
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
+# from flask_uploads import IMAGES, UploadSet,configure_uploads
+from flask_migrate import Migrate, MigrateCommand
 
 
-db = SQLAlchemy()
-mail = Mail()
-bootstap = Bootstrap()
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
+db = SQLAlchemy()
+from app.models import User
+mail = Mail()
+bootstap = Bootstrap()
+
+# photos = UploadSet('photos',IMAGES)
+
+
 
 def create_app(config_name):
-    app = Flask(__name__)
-    from .main import main as main_blueprint
-    from .auth import auth as auth_blueprint
-   #creating configurations
+    app=Flask(__name__)
     app.config.from_object(config_options[config_name])
+    from .auth import auth as authentication_blueprint
+    from .main import main as main_blueprint
 
-    #initializing flask extentions
-    bootstap.init_app(app)
-    db.init_app(app)
-    login_manager.init_app(app)
-    mail.init_app(app)
-
-    #registering the blueprint
+    app.register_blueprint(authentication_blueprint)
     app.register_blueprint(main_blueprint)
-    app.register_blueprint(auth_blueprint)
+
+    login_manager.init_app(app)
+    db.init_app(app)
+    bootstap.init_app(app)
+    # configure_uploads(app,photos)
+    mail.init_app(app)
+    migrate = Migrate(app,db)
+    
+
 
     return app
