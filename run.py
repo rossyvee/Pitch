@@ -3,7 +3,7 @@
 from app import create_app,db
 
 
-app = create_app('development')
+app = create_app('production')
 
 # manager = Manager(app)
 
