@@ -9,11 +9,10 @@ from .. import db
 @main.route('/')
 def index():
     pitches = Pitch.query.all()
-    job = Pitch.query.filter_by(category = 'Job').all() 
-    event = Pitch.query.filter_by(category = 'Events').all()
-    advertisement = Pitch.query.filter_by(category = 'Advertisement').all()
-    return render_template('index.html', job = job,event = event, pitches = pitches,advertisement= advertisement)
-
+    business = Pitch.query.filter_by(category='business').all()
+    technology = Pitch.query.filter_by(category='technology').all()
+    idea = Pitch.query.filter_by(category='idea').all()
+    return render_template('index.html', business=business, technology=technology, pitches=pitches, idea=idea)
 @main.route('/create_new', methods = ['POST','GET'])
 @login_required
 def new_pitch():
